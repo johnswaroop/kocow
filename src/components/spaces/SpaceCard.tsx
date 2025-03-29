@@ -63,13 +63,13 @@ export default function SpaceCard({ space, onClick }: SpaceCardProps) {
             {space.amenities.slice(0, 3).map((amenity, index) => (
               <span
                 key={index}
-                className="text-xs px-2 py-1 bg-gray-100/70 text-gray-700 rounded-md"
+                className="inline-flex items-center px-2.5 py-1 text-xs font-medium bg-[rgb(255,70,46)]/10 text-[rgb(255,70,46)] rounded-md border border-[rgb(255,70,46)]/20 hover:bg-[rgb(255,70,46)]/20 hover:border-[rgb(255,70,46)]/40 transition-all duration-200"
               >
                 {amenity}
               </span>
             ))}
             {space.amenities.length > 3 && (
-              <span className="text-xs px-2 py-1 bg-gray-100/70 text-gray-700 rounded-md">
+              <span className="inline-flex items-center px-2.5 py-1 text-xs font-medium bg-[rgb(255,70,46)]/10 text-[rgb(255,70,46)] rounded-md border border-[rgb(255,70,46)]/20 hover:bg-[rgb(255,70,46)]/20 hover:border-[rgb(255,70,46)]/40 transition-all duration-200">
                 +{space.amenities.length - 3} more
               </span>
             )}

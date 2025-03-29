@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 interface BookingCalendarProps {
@@ -14,12 +14,23 @@ export default function BookingCalendar({
 }: BookingCalendarProps) {
   const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [startTime, setStartTime] = useState<string>("09:00");
-  const [duration, setDuration] = useState<number>(1);
+  const [startTime, setStartTime] = useState<string>("");
+  const [duration, setDuration] = useState<number>(8);
   const [isLoading, setIsLoading] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [customDates, setCustomDates] = useState<Date[]>([]);
   const [tempDate, setTempDate] = useState<string>("");
+
+  // Set today's date and current time as default
+  useEffect(() => {
+    const today = new Date();
+    setSelectedDate(today);
+
+    // Format current time to HH:mm
+    const hours = today.getHours().toString().padStart(2, "0");
+    const minutes = today.getMinutes().toString().padStart(2, "0");
+    setStartTime(`${hours}:${minutes}`);
+  }, []);
 
   // Generate dates for the next 30 days
   const generateDates = () => {
@@ -58,20 +69,6 @@ export default function BookingCalendar({
       setTempDate("");
     }
   };
-
-  // Generate available hours (9 AM to 6 PM)
-  const availableHours = [
-    "09:00",
-    "10:00",
-    "11:00",
-    "12:00",
-    "13:00",
-    "14:00",
-    "15:00",
-    "16:00",
-    "17:00",
-    "18:00",
-  ];
 
   // Duration options
   const durationOptions = [
@@ -282,34 +279,18 @@ export default function BookingCalendar({
           Select Start Time
         </h3>
         <div className="relative">
-          <select
+          <input
+            type="time"
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
+            min="09:00"
+            max="18:00"
             className="w-full bg-white/50 backdrop-blur-sm border border-white/30 rounded-md shadow-sm py-3 px-4 text-gray-800 appearance-none focus:outline-none focus:ring-2 focus:ring-[rgb(255,70,46)]/50 focus:border-transparent transition-all duration-200"
-          >
-            {availableHours.map((time) => (
-              <option key={time} value={time}>
-                {time}
-              </option>
-            ))}
-          </select>
-          <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-            <svg
-              className="w-5 h-5 text-gray-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </div>
+          />
         </div>
+        <p className="mt-2 text-sm text-gray-500">
+          Available hours: 9:00 AM - 6:00 PM
+        </p>
       </div>
 
       {/* Duration selection */}
