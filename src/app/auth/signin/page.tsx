@@ -113,22 +113,22 @@ export default function SignIn() {
         }}
       />
 
-      <div className="min-h-screen flex relative overflow-hidden bg-gradient-to-br from-indigo-100 via-purple-50 to-blue-100">
-        {/* Background abstract shapes */}
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
-        <div className="absolute top-1/3 -right-24 w-96 h-96 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-24 left-1/3 w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
+      <div className="min-h-screen flex relative overflow-hidden bg-gray-50">
+        {/* Background blobs */}
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-[rgb(255,70,46)]/10 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute top-1/3 -right-24 w-96 h-96 bg-[rgb(255,70,46)]/5 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-24 left-1/3 w-96 h-96 bg-[rgb(255,70,46)]/10 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
 
         {/* Content container */}
         <div className="container mx-auto p-4 flex justify-center items-center">
           <div className="w-full max-w-md z-10">
             {/* Glass card */}
-            <div className="backdrop-filter backdrop-blur-lg bg-white/30 rounded-2xl border border-white/20 shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:bg-white/40">
+            <div className="backdrop-filter backdrop-blur-md bg-white/30 rounded-lg border border-white/20 shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:bg-white/40">
               <div className="p-10">
                 <div className="flex justify-center mb-6">
-                  <div className="w-14 h-14 flex items-center justify-center rounded-full bg-white/60 backdrop-blur-md shadow-inner">
+                  <div className="w-14 h-14 flex items-center justify-center rounded-lg bg-[rgb(255,70,46)]/10">
                     <svg
-                      className="h-8 w-8 text-indigo-600"
+                      className="h-8 w-8 text-[rgb(255,70,46)]"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -152,7 +152,7 @@ export default function SignIn() {
                 </p>
 
                 {error && (
-                  <div className="mb-6 rounded-xl backdrop-blur-md bg-red-500/10 border border-red-500/20 p-4">
+                  <div className="mb-6 rounded-lg backdrop-blur-md bg-red-500/10 border border-red-500/20 p-4">
                     <div className="flex items-center">
                       <svg
                         className="w-5 h-5 text-red-500 mr-2"
@@ -174,7 +174,7 @@ export default function SignIn() {
                   <button
                     onClick={handleGoogleSignIn}
                     disabled={isLoading}
-                    className="group w-full flex justify-center items-center px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl shadow-lg text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="group w-full flex justify-center items-center px-6 py-4 bg-[rgb(255,70,46)] hover:bg-[rgb(255,70,46)]/90 text-white rounded-md shadow-md text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[rgb(255,70,46)]"
                   >
                     <svg
                       className="h-5 w-5 mr-3 text-white"
@@ -209,14 +209,14 @@ export default function SignIn() {
                   By continuing, you agree to our{" "}
                   <a
                     href="#"
-                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                    className="font-medium text-[rgb(255,70,46)] hover:text-[rgb(255,70,46)]/90"
                   >
                     Terms
                   </a>{" "}
                   and{" "}
                   <a
                     href="#"
-                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                    className="font-medium text-[rgb(255,70,46)] hover:text-[rgb(255,70,46)]/90"
                   >
                     Privacy Policy
                   </a>

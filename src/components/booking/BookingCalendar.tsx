@@ -17,6 +17,9 @@ export default function BookingCalendar({
   const [startTime, setStartTime] = useState<string>("09:00");
   const [duration, setDuration] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [customDates, setCustomDates] = useState<Date[]>([]);
+  const [tempDate, setTempDate] = useState<string>("");
 
   // Generate dates for the next 30 days
   const generateDates = () => {
@@ -29,7 +32,31 @@ export default function BookingCalendar({
       dates.push(date);
     }
 
-    return dates;
+    // Add custom dates and sort
+    const allDates = [...dates, ...customDates];
+    return allDates.sort((a, b) => a.getTime() - b.getTime());
+  };
+
+  // Handle custom date selection
+  const handleCustomDateSelect = (event: React.FormEvent<HTMLInputElement>) => {
+    const input = event.target as HTMLInputElement;
+    setTempDate(input.value);
+  };
+
+  const handleSaveDate = () => {
+    if (!tempDate) return;
+
+    const selectedDate = new Date(tempDate);
+    const today = new Date();
+    const sixMonthsFromNow = new Date();
+    sixMonthsFromNow.setMonth(today.getMonth() + 6);
+
+    if (selectedDate >= today && selectedDate <= sixMonthsFromNow) {
+      setSelectedDate(selectedDate);
+      setCustomDates((prev) => [...prev, selectedDate]);
+      setShowCalendar(false);
+      setTempDate("");
+    }
   };
 
   // Generate available hours (9 AM to 6 PM)
@@ -98,9 +125,28 @@ export default function BookingCalendar({
     <div className="w-full">
       {/* Date selection */}
       <div className="mb-6">
-        <h3 className="text-base font-semibold text-gray-800 mb-3">
-          Select Date
-        </h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-base font-semibold text-gray-800">Select Date</h3>
+          <button
+            onClick={() => setShowCalendar(true)}
+            className="flex items-center justify-center w-8 h-8 rounded-md bg-[rgb(255,70,46)]/10 hover:bg-[rgb(255,70,46)]/20 text-[rgb(255,70,46)] transition-colors duration-200"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+          </button>
+        </div>
         <div className="flex overflow-x-auto py-2 space-x-2 pb-4 -mx-2 px-2">
           {generateDates().map((date, index) => {
             const isSelected =
@@ -112,9 +158,9 @@ export default function BookingCalendar({
               <button
                 key={index}
                 onClick={() => setSelectedDate(date)}
-                className={`flex-shrink-0 w-16 h-16 flex flex-col items-center justify-center rounded-xl transition-all duration-200 ${
+                className={`flex-shrink-0 w-16 h-16 flex flex-col items-center justify-center rounded-md transition-all duration-200 ${
                   isSelected
-                    ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md"
+                    ? "bg-[rgb(255,70,46)] text-white shadow-md"
                     : "bg-white/40 backdrop-blur-sm hover:bg-white/60 border border-white/30 text-gray-700"
                 }`}
               >
@@ -123,7 +169,7 @@ export default function BookingCalendar({
                 </span>
                 <span
                   className={`text-lg font-bold ${
-                    isToday && !isSelected ? "text-indigo-600" : ""
+                    isToday && !isSelected ? "text-[rgb(255,70,46)]" : ""
                   }`}
                 >
                   {date.getDate()}
@@ -134,6 +180,102 @@ export default function BookingCalendar({
         </div>
       </div>
 
+      {/* Selected Date Display */}
+      {selectedDate && (
+        <div className="mb-6 rounded-md bg-[rgb(255,70,46)]/5 backdrop-blur-sm p-4 border border-[rgb(255,70,46)]/10">
+          <div className="flex items-center justify-between">
+            <div>
+              <h4 className="text-sm font-medium text-[rgb(255,70,46)] mb-1">
+                Selected Date
+              </h4>
+              <p className="text-lg font-semibold text-gray-800">
+                {selectedDate.toLocaleDateString("en-US", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </p>
+            </div>
+            <button
+              onClick={() => setSelectedDate(null)}
+              className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Calendar Modal */}
+      {showCalendar && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4 shadow-xl">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-800">
+                Select Date
+              </h3>
+              <button
+                onClick={() => setShowCalendar(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <input
+              type="date"
+              min={new Date().toISOString().split("T")[0]}
+              max={
+                new Date(new Date().setMonth(new Date().getMonth() + 6))
+                  .toISOString()
+                  .split("T")[0]
+              }
+              value={tempDate}
+              onInput={handleCustomDateSelect}
+              className="w-full bg-white/50 backdrop-blur-sm border border-white/30 rounded-md shadow-sm py-3 px-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[rgb(255,70,46)]/50 focus:border-transparent transition-all duration-200"
+            />
+            <p className="mt-2 text-sm text-gray-500">
+              Select a date within the next 6 months
+            </p>
+            <button
+              onClick={handleSaveDate}
+              disabled={!tempDate}
+              className={`w-full mt-4 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+                !tempDate
+                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  : "bg-[rgb(255,70,46)] text-white hover:bg-[rgb(255,70,46)]/90"
+              }`}
+            >
+              Save Date
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Time selection */}
       <div className="mb-6">
         <h3 className="text-base font-semibold text-gray-800 mb-3">
@@ -143,7 +285,7 @@ export default function BookingCalendar({
           <select
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
-            className="w-full bg-white/50 backdrop-blur-sm border border-white/30 rounded-xl shadow-sm py-3 px-4 text-gray-800 appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent transition-all duration-200"
+            className="w-full bg-white/50 backdrop-blur-sm border border-white/30 rounded-md shadow-sm py-3 px-4 text-gray-800 appearance-none focus:outline-none focus:ring-2 focus:ring-[rgb(255,70,46)]/50 focus:border-transparent transition-all duration-200"
           >
             {availableHours.map((time) => (
               <option key={time} value={time}>
@@ -179,7 +321,7 @@ export default function BookingCalendar({
           <select
             value={duration}
             onChange={(e) => setDuration(Number(e.target.value))}
-            className="w-full bg-white/50 backdrop-blur-sm border border-white/30 rounded-xl shadow-sm py-3 px-4 text-gray-800 appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent transition-all duration-200"
+            className="w-full bg-white/50 backdrop-blur-sm border border-white/30 rounded-md shadow-sm py-3 px-4 text-gray-800 appearance-none focus:outline-none focus:ring-2 focus:ring-[rgb(255,70,46)]/50 focus:border-transparent transition-all duration-200"
           >
             {durationOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -208,8 +350,8 @@ export default function BookingCalendar({
 
       {/* Booking summary */}
       {selectedDate && (
-        <div className="rounded-xl bg-indigo-50/70 backdrop-blur-sm p-4 mb-6 border border-indigo-100">
-          <h3 className="font-semibold text-indigo-800 mb-2">
+        <div className="rounded-md bg-[rgb(255,70,46)]/5 backdrop-blur-sm p-4 mb-6 border border-[rgb(255,70,46)]/10">
+          <h3 className="font-semibold text-[rgb(255,70,46)] mb-2">
             Booking Summary
           </h3>
           <div className="flex flex-col space-y-2 text-sm">
@@ -229,10 +371,12 @@ export default function BookingCalendar({
                 {duration} hour{duration > 1 ? "s" : ""}
               </span>
             </div>
-            <div className="w-full h-px bg-indigo-200/50 my-1"></div>
+            <div className="w-full h-px bg-[rgb(255,70,46)]/10 my-1"></div>
             <div className="flex justify-between font-semibold">
               <span className="text-gray-700">Total Price:</span>
-              <span className="text-indigo-800">${totalPrice.toFixed(2)}</span>
+              <span className="text-[rgb(255,70,46)]">
+                ₹{totalPrice.toFixed(2)}
+              </span>
             </div>
           </div>
         </div>
@@ -242,10 +386,10 @@ export default function BookingCalendar({
       <button
         onClick={handleContinue}
         disabled={!selectedDate || isLoading}
-        className={`w-full py-3 px-4 rounded-xl font-medium shadow-md transition-all duration-300 ${
+        className={`w-full py-3 px-4 rounded-md font-medium shadow-md transition-all duration-300 ${
           !selectedDate || isLoading
             ? "bg-gray-400 text-white cursor-not-allowed"
-            : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white hover:shadow-lg"
+            : "bg-[rgb(255,70,46)] hover:bg-[rgb(255,70,46)]/90 text-white hover:shadow-lg"
         }`}
       >
         {isLoading ? (

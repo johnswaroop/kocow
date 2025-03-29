@@ -159,18 +159,18 @@ export default function OnboardingForm({ initialName }: OnboardingFormProps) {
       case 1:
         return (
           <>
-            <div className="text-center mb-5">
-              <h3 className="text-xl font-semibold text-gray-800">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold text-gray-900">
                 Tell us who you are
               </h3>
-              <p className="text-gray-600 mt-1 text-sm">
+              <p className="text-gray-600 mt-2 text-base">
                 We&apos;ll personalize your experience
               </p>
             </div>
             <div className="mb-4">
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-semibold text-gray-700 mb-2"
               >
                 Full Name
               </label>
@@ -197,7 +197,7 @@ export default function OnboardingForm({ initialName }: OnboardingFormProps) {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="John Doe"
-                  className="pl-10 w-full bg-white/50 backdrop-blur-md border border-white/30 rounded-xl shadow-sm py-3 px-4 text-gray-800 placeholder-gray-500/60 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent transition-all duration-200"
+                  className="pl-10 w-full bg-white border border-gray-200 rounded-lg shadow-sm py-3 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[rgb(255,70,46)]/50 focus:border-[rgb(255,70,46)] transition-all duration-200"
                 />
               </div>
             </div>
@@ -206,18 +206,18 @@ export default function OnboardingForm({ initialName }: OnboardingFormProps) {
       case 2:
         return (
           <>
-            <div className="text-center mb-5">
-              <h3 className="text-xl font-semibold text-gray-800">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold text-gray-900">
                 How can we reach you?
               </h3>
-              <p className="text-gray-600 mt-1 text-sm">
+              <p className="text-gray-600 mt-2 text-base">
                 For booking confirmations
               </p>
             </div>
             <div className="mb-4">
               <label
                 htmlFor="phone"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-semibold text-gray-700 mb-2"
               >
                 Phone Number
               </label>
@@ -240,7 +240,7 @@ export default function OnboardingForm({ initialName }: OnboardingFormProps) {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="+1 (555) 555-5555"
-                  className="pl-10 w-full bg-white/50 backdrop-blur-md border border-white/30 rounded-xl shadow-sm py-3 px-4 text-gray-800 placeholder-gray-500/60 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent transition-all duration-200"
+                  className="pl-10 w-full bg-white border border-gray-200 rounded-lg shadow-sm py-3 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[rgb(255,70,46)]/50 focus:border-[rgb(255,70,46)] transition-all duration-200"
                 />
               </div>
             </div>
@@ -249,18 +249,18 @@ export default function OnboardingForm({ initialName }: OnboardingFormProps) {
       case 3:
         return (
           <>
-            <div className="text-center mb-5">
-              <h3 className="text-xl font-semibold text-gray-800">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold text-gray-900">
                 What do you do?
               </h3>
-              <p className="text-gray-600 mt-1 text-sm">
-                We&apos;ll recommend matching spaces
+              <p className="text-gray-600 mt-2 text-base">
+                Help us understand your needs
               </p>
             </div>
             <div className="mb-4">
               <label
                 htmlFor="profession"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-semibold text-gray-700 mb-2"
               >
                 Profession
               </label>
@@ -287,8 +287,8 @@ export default function OnboardingForm({ initialName }: OnboardingFormProps) {
                   required
                   value={formData.profession}
                   onChange={handleChange}
-                  placeholder="e.g. Designer, Developer, Writer"
-                  className="pl-10 w-full bg-white/50 backdrop-blur-md border border-white/30 rounded-xl shadow-sm py-3 px-4 text-gray-800 placeholder-gray-500/60 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent transition-all duration-200"
+                  placeholder="e.g. Software Engineer, Designer"
+                  className="pl-10 w-full bg-white border border-gray-200 rounded-lg shadow-sm py-3 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[rgb(255,70,46)]/50 focus:border-[rgb(255,70,46)] transition-all duration-200"
                 />
               </div>
             </div>
@@ -300,129 +300,108 @@ export default function OnboardingForm({ initialName }: OnboardingFormProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 flex justify-center items-center p-4">
-      <div className="w-full max-w-2xl">
-        {/* Main container */}
-        <div className="glass-card overflow-hidden">
-          {/* Header */}
-          <div className="glass-gradient text-white p-6">
-            <h2 className="text-2xl font-bold">Profile Setup</h2>
-            <p className="text-sm opacity-80 mt-1">
-              Step {step} of {totalSteps}
-            </p>
+    <div className="min-h-screen flex relative overflow-hidden bg-gray-100">
+      {/* Background blobs */}
+      <div className="absolute -top-24 -left-24 w-96 h-96 bg-[rgb(255,70,46)]/15 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
+      <div className="absolute top-1/3 -right-24 w-96 h-96 bg-[rgb(255,70,46)]/10 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
+      <div className="absolute -bottom-24 left-1/3 w-96 h-96 bg-[rgb(255,70,46)]/15 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
 
-            {/* Progress bar */}
-            <div className="mt-4 h-1 w-full bg-white/20 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-white rounded-full transition-all duration-500 ease-in-out"
-                style={{ width: `${(step / totalSteps) * 100}%` }}
-              ></div>
-            </div>
-          </div>
-
-          {/* Form content */}
-          <div className="p-6">
-            {error && (
-              <div className="mb-6 rounded-xl bg-red-50 border border-red-200 p-4">
-                <div className="flex items-center">
-                  <svg
-                    className="h-5 w-5 text-red-500 mr-2"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <p className="text-sm text-red-600">{error}</p>
-                </div>
-              </div>
-            )}
-
-            <form
-              onSubmit={
-                step === totalSteps
-                  ? handleSubmit
-                  : (e) => {
-                      e.preventDefault();
-                      nextStep();
-                    }
-              }
-            >
-              {renderStep()}
-
-              {/* Navigation buttons */}
-              <div className="mt-8 flex justify-between">
-                {step > 1 ? (
-                  <button
-                    type="button"
-                    onClick={prevStep}
-                    className="glass-button px-4 py-2 text-gray-700 text-sm font-medium"
-                  >
-                    Back
-                  </button>
-                ) : (
-                  <div></div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className={`px-6 py-2 rounded-xl text-white text-sm font-medium shadow-sm transition-all duration-200 ${
-                    isLoading
-                      ? "bg-indigo-400 cursor-not-allowed"
-                      : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500"
+      <div className="container mx-auto px-4 py-12 relative z-10">
+        <div className="max-w-2xl mx-auto">
+          {/* Progress indicator */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-2">
+              {[...Array(totalSteps)].map((_, index) => (
+                <div
+                  key={index + 1}
+                  className={`flex items-center ${
+                    index < totalSteps - 1 ? "flex-1" : ""
                   }`}
                 >
-                  {isLoading ? (
-                    <span className="flex items-center">
-                      <svg
-                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Processing...
-                    </span>
-                  ) : step < totalSteps ? (
-                    "Continue"
-                  ) : (
-                    "Complete Setup"
+                  <div
+                    className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-semibold shadow-sm ${
+                      step >= index + 1
+                        ? "bg-[rgb(255,70,46)] text-white shadow-[rgb(255,70,46)]/20"
+                        : "bg-white text-gray-600 shadow-gray-200"
+                    }`}
+                  >
+                    {index + 1}
+                  </div>
+                  {index < totalSteps - 1 && (
+                    <div
+                      className={`flex-1 h-1.5 mx-2 rounded-full ${
+                        step > index + 1
+                          ? "bg-[rgb(255,70,46)] shadow-sm shadow-[rgb(255,70,46)]/20"
+                          : "bg-gray-200"
+                      }`}
+                    />
                   )}
-                </button>
-              </div>
-            </form>
-
-            {/* Step indicators */}
-            <div className="flex justify-center mt-8">
-              {Array.from({ length: totalSteps }).map((_, idx) => (
-                <div
-                  key={idx}
-                  className={`w-2 h-2 mx-1 rounded-full transition-all duration-300 ${
-                    step > idx
-                      ? "bg-indigo-600"
-                      : step === idx + 1
-                      ? "bg-indigo-400"
-                      : "bg-gray-300"
-                  }`}
-                />
+                </div>
               ))}
+            </div>
+            <p className="text-center text-sm font-medium text-gray-700">
+              Step {step} of {totalSteps}
+            </p>
+          </div>
+
+          {/* Form card */}
+          <div className="bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden">
+            <div className="p-8">
+              <form onSubmit={handleSubmit}>
+                {renderStep()}
+
+                {error && (
+                  <div className="mb-6 rounded-lg bg-red-50 border border-red-200 p-4">
+                    <div className="flex items-center">
+                      <svg
+                        className="w-5 h-5 text-red-500 mr-2"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <p className="text-red-700 text-sm font-medium">
+                        {error}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-between mt-8">
+                  {step > 1 && (
+                    <button
+                      type="button"
+                      onClick={prevStep}
+                      className="px-6 py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 border border-gray-200 shadow-sm hover:shadow-md"
+                    >
+                      Back
+                    </button>
+                  )}
+                  {step < totalSteps ? (
+                    <button
+                      type="button"
+                      onClick={nextStep}
+                      className={`px-6 py-3 bg-[rgb(255,70,46)] hover:bg-[rgb(255,70,46)]/90 text-white rounded-lg shadow-md hover:shadow-lg text-base font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[rgb(255,70,46)] ${
+                        step === 1 ? "ml-auto" : ""
+                      }`}
+                    >
+                      Next
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className="px-6 py-3 bg-[rgb(255,70,46)] hover:bg-[rgb(255,70,46)]/90 text-white rounded-lg shadow-md hover:shadow-lg text-base font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[rgb(255,70,46)] ml-auto"
+                    >
+                      {isLoading ? "Saving..." : "Complete Setup"}
+                    </button>
+                  )}
+                </div>
+              </form>
             </div>
           </div>
         </div>

@@ -83,21 +83,21 @@ export default function BookingTermsPage() {
   // If required params are missing, show loading
   if (!spaceId || !date || !startTime || !duration || !total || !space) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 py-12">
+      <div className="min-h-screen bg-gray-50 py-12">
         <div className="container mx-auto px-4">
-          <div className="w-full h-96 rounded-2xl bg-white/30 backdrop-blur-md animate-pulse"></div>
+          <div className="w-full h-96 rounded-lg bg-white/30 backdrop-blur-md animate-pulse"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Background blobs */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-        <div className="absolute top-1/3 -right-24 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-24 left-1/3 w-96 h-96 bg-violet-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-[rgb(255,70,46)]/10 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute top-1/3 -right-24 w-96 h-96 bg-[rgb(255,70,46)]/5 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-24 left-1/3 w-96 h-96 bg-[rgb(255,70,46)]/10 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
       <div className="container mx-auto px-4 py-12 relative z-10">
@@ -106,25 +106,25 @@ export default function BookingTermsPage() {
           <div className="mb-8">
             <div className="flex justify-between items-center mb-2">
               <div className="flex items-center">
-                <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-medium">
+                <div className="w-8 h-8 rounded-md bg-[rgb(255,70,46)] text-white flex items-center justify-center font-medium">
                   1
                 </div>
                 <div className="ml-2 text-sm font-medium text-gray-700">
                   Select Space
                 </div>
               </div>
-              <div className="flex-1 h-1 mx-4 bg-indigo-200"></div>
+              <div className="flex-1 h-1 mx-4 bg-[rgb(255,70,46)]/10"></div>
               <div className="flex items-center">
-                <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-medium">
+                <div className="w-8 h-8 rounded-md bg-[rgb(255,70,46)] text-white flex items-center justify-center font-medium">
                   2
                 </div>
                 <div className="ml-2 text-sm font-medium text-gray-700">
                   Select Date & Time
                 </div>
               </div>
-              <div className="flex-1 h-1 mx-4 bg-indigo-200"></div>
+              <div className="flex-1 h-1 mx-4 bg-[rgb(255,70,46)]/10"></div>
               <div className="flex items-center">
-                <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-medium">
+                <div className="w-8 h-8 rounded-md bg-[rgb(255,70,46)] text-white flex items-center justify-center font-medium">
                   3
                 </div>
                 <div className="ml-2 text-sm font-medium text-gray-700">
@@ -135,49 +135,116 @@ export default function BookingTermsPage() {
           </div>
 
           {/* Main content */}
-          <div className="rounded-2xl backdrop-blur-md bg-white/30 border border-white/20 shadow-lg overflow-hidden">
+          <div className="rounded-lg backdrop-blur-md bg-white/30 border border-white/20 shadow-lg overflow-hidden">
             <div className="p-6">
               <h1 className="text-2xl font-bold text-gray-800 mb-6">
                 Terms & Conditions
               </h1>
 
               {/* Booking summary */}
-              <div className="rounded-xl bg-indigo-50/70 backdrop-blur-sm p-4 mb-6 border border-indigo-100">
-                <h2 className="font-semibold text-indigo-800 mb-3">
+              <div className="rounded-lg backdrop-blur-md bg-white/30 border border-white/20 shadow-lg p-6 mb-8">
+                <h2 className="text-xl font-bold text-gray-800 mb-4">
                   Booking Summary
                 </h2>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <p className="text-gray-600 mb-1">Space:</p>
-                    <p className="font-medium text-gray-800">{space.name}</p>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-[rgb(255,70,46)]/10 rounded-md">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-[rgb(255,70,46)]"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
+                        </svg>
+                      </div>
+                      <span className="text-gray-600">Date</span>
+                    </div>
+                    <span className="text-gray-800 font-medium">{date}</span>
                   </div>
-                  <div>
-                    <p className="text-gray-600 mb-1">Date:</p>
-                    <p className="font-medium text-gray-800">
-                      {new Date(date).toLocaleDateString("en-US", {
-                        weekday: "short",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600 mb-1">Time:</p>
-                    <p className="font-medium text-gray-800">
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-[rgb(255,70,46)]/10 rounded-md">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-[rgb(255,70,46)]"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </div>
+                      <span className="text-gray-600">Time</span>
+                    </div>
+                    <span className="text-gray-800 font-medium">
                       {startTime} - {/* Calculate end time */}
-                    </p>
+                    </span>
                   </div>
-                  <div>
-                    <p className="text-gray-600 mb-1">Duration:</p>
-                    <p className="font-medium text-gray-800">
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-[rgb(255,70,46)]/10 rounded-md">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-[rgb(255,70,46)]"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </div>
+                      <span className="text-gray-600">Duration</span>
+                    </div>
+                    <span className="text-gray-800 font-medium">
                       {duration} hour{parseInt(duration) > 1 ? "s" : ""}
-                    </p>
+                    </span>
                   </div>
-                  <div className="col-span-2">
-                    <p className="text-gray-600 mb-1">Total Price:</p>
-                    <p className="font-bold text-indigo-800">
-                      ${parseFloat(total).toFixed(2)}
-                    </p>
+
+                  <div className="w-full h-px bg-gray-200 my-4"></div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-[rgb(255,70,46)]/10 rounded-md">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-[rgb(255,70,46)]"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </div>
+                      <span className="text-gray-600">Total Price</span>
+                    </div>
+                    <span className="text-xl font-bold text-[rgb(255,70,46)]">
+                      ₹{parseFloat(total).toFixed(2)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -185,7 +252,7 @@ export default function BookingTermsPage() {
               {/* Terms and conditions text */}
               <div
                 ref={termsContainerRef}
-                className="h-64 overflow-y-auto p-4 rounded-xl bg-white/50 backdrop-blur-sm border border-white/30 mb-6 text-sm text-gray-700 custom-scrollbar"
+                className="h-64 overflow-y-auto p-4 rounded-md bg-white/50 backdrop-blur-sm border border-white/30 mb-6 text-sm text-gray-700 custom-scrollbar"
               >
                 <h3 className="font-bold text-gray-800 mb-2">
                   1. BOOKING AGREEMENT
@@ -322,7 +389,7 @@ export default function BookingTermsPage() {
                     checked={isChecked}
                     onChange={handleCheckboxChange}
                     disabled={!hasScrolled}
-                    className="form-checkbox h-5 w-5 text-indigo-600 transition duration-150 ease-in-out"
+                    className="form-checkbox h-5 w-5 text-[rgb(255,70,46)] transition duration-150 ease-in-out"
                   />
                   <span className="ml-2 text-sm text-gray-700">
                     I have read and agree to the terms and conditions
@@ -340,7 +407,7 @@ export default function BookingTermsPage() {
                 <button
                   type="button"
                   onClick={() => router.back()}
-                  className="px-6 py-3 bg-white/40 backdrop-blur-sm text-gray-700 rounded-xl hover:bg-white/60 transition-all duration-200 border border-white/30"
+                  className="px-6 py-3 bg-white/40 backdrop-blur-sm text-gray-700 rounded-md hover:bg-white/60 transition-all duration-200 border border-white/30"
                 >
                   Back
                 </button>
@@ -349,10 +416,10 @@ export default function BookingTermsPage() {
                   type="button"
                   onClick={handleSubmit}
                   disabled={!isChecked || isLoading}
-                  className={`px-8 py-3 rounded-xl text-white font-medium shadow-md transition-all duration-300 ${
+                  className={`px-8 py-3 rounded-md text-white font-medium shadow-md transition-all duration-300 ${
                     !isChecked || isLoading
                       ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 hover:shadow-lg"
+                      : "bg-[rgb(255,70,46)] hover:bg-[rgb(255,70,46)]/90 hover:shadow-lg"
                   }`}
                 >
                   {isLoading ? (
