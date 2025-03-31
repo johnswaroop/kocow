@@ -1,13 +1,7 @@
 import { requireAuth } from "@/lib/auth";
 import SpaceDetails from "./SpaceDetails";
 
-interface SpacePageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default async function SpacePage({ params }: SpacePageProps) {
+export default async function SpacePage({ params }) {
   // Require authentication
   const user = await requireAuth();
   const { id } = params;

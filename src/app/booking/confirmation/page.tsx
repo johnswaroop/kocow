@@ -3,8 +3,9 @@
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { mockSpaces } from "@/data/mockSpaces";
+import { Suspense } from "react";
 
-export default function BookingConfirmationPage() {
+function BookingConfirmationPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -264,5 +265,13 @@ export default function BookingConfirmationPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ParentContainer() {
+  return (
+    <Suspense>
+      <BookingConfirmationPage></BookingConfirmationPage>
+    </Suspense>
   );
 }

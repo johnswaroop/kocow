@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { mockSpaces } from "@/data/mockSpaces";
 import { User } from "@/lib/auth";
 
-export default function BookingTermsPage() {
+function BookingTermsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const termsContainerRef = useRef<HTMLDivElement>(null);
@@ -453,5 +453,13 @@ export default function BookingTermsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ParentContainer() {
+  return (
+    <Suspense>
+      <BookingTermsPage />
+    </Suspense>
   );
 }

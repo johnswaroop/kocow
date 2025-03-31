@@ -2,8 +2,9 @@
 
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 
-export default function AuthError() {
+function AuthError() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const error = searchParams.get("error") || "Unknown authentication error";
@@ -71,5 +72,13 @@ export default function AuthError() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ParentContainer() {
+  return (
+    <Suspense>
+      <AuthError />
+    </Suspense>
   );
 }
