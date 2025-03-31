@@ -75,9 +75,11 @@ export default function SignIn() {
       if (data.success) {
         // Check if user has completed onboarding
         if (data.onboardingCompleted) {
-          router.push("/spaces");
+          // router.push("/spaces");
+          location.href = "/spaces";
         } else {
-          router.push("/onboarding");
+          // router.push("/onboarding");
+          location.href = "/onboarding";
         }
       } else {
         setError(data.error || "Authentication failed");
