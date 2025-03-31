@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
 
     // Check if onboarding is completed
     const redirectTo = dbUser.onboardingCompleted
-      ? "/dashboard"
+      ? "/spaces"
       : searchParams.get("state") || "/onboarding";
 
     // Redirect to the final destination

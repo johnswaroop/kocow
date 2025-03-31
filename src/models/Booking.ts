@@ -13,8 +13,8 @@ const bookingSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  endTime: {
-    type: Date,
+  duration: {
+    type: Number,
     required: true,
   },
   status: {

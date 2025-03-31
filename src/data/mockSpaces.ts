@@ -17,7 +17,7 @@ export const mockSpaces: Space[] = [
     shortDescription: "Modern workspace with flexible booking options",
     description:
       "Our flexible coworking space offers a modern, comfortable environment with high-speed internet, meeting rooms, and a collaborative atmosphere. Perfect for freelancers, remote workers, and small teams who need a professional workspace without the commitment of a long-term lease.",
-    capacity: 20,
+    capacity: 1,
     hourlyRate: 93.75, // 750/8hrs
     amenities: [
       "High-speed WiFi",
@@ -44,7 +44,7 @@ export const mockSpaces: Space[] = [
     shortDescription: "Professional business address with mail handling",
     description:
       "Establish your business presence with our virtual office package. Includes a prestigious business address, mail handling, call forwarding, and access to meeting rooms. Perfect for businesses that need a professional presence without the overhead of a physical office.",
-    capacity: 1,
+    capacity: 6,
     hourlyRate: 0, // Monthly rate: 7500
     amenities: [
       "Business address",

@@ -40,7 +40,7 @@ export default async function OnboardingPage() {
         console.log(
           "[Onboarding] User already completed onboarding, redirecting to dashboard"
         );
-        return redirect("/dashboard");
+        return redirect("/spaces");
       }
     } catch (error) {
       console.error("[Onboarding] Error ensuring user exists:", error);

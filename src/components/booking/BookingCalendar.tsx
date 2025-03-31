@@ -6,11 +6,13 @@ import { useRouter } from "next/navigation";
 interface BookingCalendarProps {
   spaceId: string;
   hourlyRate: number;
+  userId: string;
 }
 
 export default function BookingCalendar({
   spaceId,
   hourlyRate,
+  userId,
 }: BookingCalendarProps) {
   const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -111,10 +113,11 @@ export default function BookingCalendar({
 
     // Create formatted date string
     const formattedDate = selectedDate.toISOString().split("T")[0];
+    const endTime = calculateEndTime();
 
     // Redirect to the next step in the booking process with query params
     router.push(
-      `/booking/terms?spaceId=${spaceId}&date=${formattedDate}&startTime=${startTime}&duration=${duration}&total=${totalPrice}`
+      `/booking/terms?spaceId=${spaceId}&date=${formattedDate}&startTime=${startTime}&endTime=${endTime}&duration=${duration}&total=${totalPrice}&userId=${userId}`
     );
   };
 

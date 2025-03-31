@@ -118,7 +118,7 @@ export default function OnboardingForm({ initialName }: OnboardingFormProps) {
               if (retryResponse.ok) {
                 console.log("[OnboardingForm] Update succeeded on retry");
                 router.refresh();
-                router.push("/dashboard");
+                router.push("/spaces");
                 return;
               } else {
                 console.error("[OnboardingForm] Retry update failed");
@@ -135,15 +135,13 @@ export default function OnboardingForm({ initialName }: OnboardingFormProps) {
         throw new Error(responseData.error || "Failed to update profile");
       }
 
-      console.log(
-        "[OnboardingForm] Update successful, redirecting to dashboard"
-      );
+      console.log("[OnboardingForm] Update successful, redirecting to spaces");
 
       // Refresh the session to get updated user data
       router.refresh();
 
-      // Redirect to dashboard
-      router.push("/dashboard");
+      // Redirect to spaces
+      router.push("/spaces");
     } catch (error) {
       console.error("[OnboardingForm] Error submitting form:", error);
       setError(

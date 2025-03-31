@@ -73,8 +73,12 @@ export default function SignIn() {
       const data = await res.json();
 
       if (data.success) {
-        // Redirect to onboarding or dashboard
-        router.push("/onboarding");
+        // Check if user has completed onboarding
+        if (data.onboardingCompleted) {
+          router.push("/spaces");
+        } else {
+          router.push("/onboarding");
+        }
       } else {
         setError(data.error || "Authentication failed");
       }

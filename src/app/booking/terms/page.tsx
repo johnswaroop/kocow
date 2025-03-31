@@ -3,25 +3,48 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { mockSpaces } from "@/data/mockSpaces";
+import { User } from "@/lib/auth";
 
 export default function BookingTermsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const termsContainerRef = useRef<HTMLDivElement>(null);
 
-  const [hasScrolled, setHasScrolled] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   // Get query params
   const spaceId = searchParams.get("spaceId");
   const date = searchParams.get("date");
   const startTime = searchParams.get("startTime");
+  const endTime = searchParams.get("endTime");
   const duration = searchParams.get("duration");
   const total = searchParams.get("total");
+  const userId = searchParams.get("userId");
 
   // Find space from mock data
   const space = mockSpaces.find((s) => s.id === spaceId);
+
+  // Fetch user data
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch("/api/user");
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        const userData = await response.json();
+        setUser(userData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        router.push("/auth/signin");
+      }
+    };
+
+    fetchUser();
+  }, [router]);
 
   // Handle scroll events to enable the checkbox
   useEffect(() => {
@@ -54,7 +77,7 @@ export default function BookingTermsPage() {
   };
 
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!isChecked) {
@@ -62,26 +85,92 @@ export default function BookingTermsPage() {
       return;
     }
 
+    if (!user || user.id !== userId) {
+      alert("Authentication error. Please try again.");
+      router.push("/auth/signin");
+      return;
+    }
+
     setIsLoading(true);
 
-    // Simulate API call to create booking
-    setTimeout(() => {
+    try {
+      // Create booking
+      console.log("spaceId:", spaceId);
+      console.log("userId:", userId);
+      console.log("date:", date);
+      console.log("startTime:", startTime);
+      console.log("endTime:", endTime);
+      console.log("duration:", duration);
+      console.log("total:", total);
+
+      const response = await fetch("/api/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          spaceId,
+          userId,
+          date,
+          startTime,
+          endTime,
+          duration: parseInt(duration || "0"),
+          total: parseFloat(total || "0"),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create booking");
+      }
+
       // Redirect to booking confirmation page
       router.push(
-        `/booking/confirmation?spaceId=${spaceId}&date=${date}&startTime=${startTime}&duration=${duration}&total=${total}`
+        `/booking/confirmation?spaceId=${spaceId}&date=${date}&startTime=${startTime}&endTime=${endTime}&duration=${duration}&total=${total}`
       );
-    }, 1500);
+    } catch (error) {
+      console.error("Error creating booking:", error);
+      alert("Failed to create booking. Please try again.");
+      setIsLoading(false);
+    }
   };
 
   // If required params are missing, redirect back to spaces
   useEffect(() => {
-    if (!spaceId || !date || !startTime || !duration || !total || !space) {
+    if (
+      !spaceId ||
+      !date ||
+      !startTime ||
+      !endTime ||
+      !duration ||
+      !total ||
+      !space ||
+      !userId
+    ) {
       router.push("/spaces");
     }
-  }, [spaceId, date, startTime, duration, total, space, router]);
+  }, [
+    spaceId,
+    date,
+    startTime,
+    endTime,
+    duration,
+    total,
+    space,
+    userId,
+    router,
+  ]);
 
   // If required params are missing, show loading
-  if (!spaceId || !date || !startTime || !duration || !total || !space) {
+  if (
+    !spaceId ||
+    !date ||
+    !startTime ||
+    !endTime ||
+    !duration ||
+    !total ||
+    !space ||
+    !userId
+  ) {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="container mx-auto px-4">
@@ -100,34 +189,46 @@ export default function BookingTermsPage() {
         <div className="absolute -bottom-24 left-1/3 w-96 h-96 bg-[rgb(255,70,46)]/10 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
-      <div className="container mx-auto px-4 py-12 relative z-10">
+      <div className="container mx-auto px-4 py-6 md:py-12 relative z-10">
         <div className="max-w-3xl mx-auto">
           {/* Progress indicator */}
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-2">
-              <div className="flex items-center">
-                <div className="w-8 h-8 rounded-md bg-[rgb(255,70,46)] text-white flex items-center justify-center font-medium">
+          <div className="mb-8 md:mb-14">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center relative">
+              {/* Mobile connecting lines */}
+              <div className="absolute left-4 top-10 bottom-10 w-0.5 bg-[rgb(255,70,46)]/10 md:hidden"></div>
+
+              {/* Step 1 */}
+              <div className="flex items-center w-full md:w-auto mb-12 md:mb-0 relative">
+                <div className="w-10 h-10 md:w-8 md:h-8 rounded-full bg-[rgb(255,70,46)] text-white flex items-center justify-center font-medium text-base md:text-sm relative z-10 border border-white/50">
                   1
                 </div>
-                <div className="ml-2 text-sm font-medium text-gray-700">
+                <div className="ml-4 md:ml-3 text-base md:text-sm font-medium text-gray-700">
                   Select Space
                 </div>
               </div>
-              <div className="flex-1 h-1 mx-4 bg-[rgb(255,70,46)]/10"></div>
-              <div className="flex items-center">
-                <div className="w-8 h-8 rounded-md bg-[rgb(255,70,46)] text-white flex items-center justify-center font-medium">
+
+              {/* Desktop connecting line 1 */}
+              <div className="hidden md:block flex-1 h-0.5 mx-4 bg-[rgb(255,70,46)]/10"></div>
+
+              {/* Step 2 */}
+              <div className="flex items-center w-full md:w-auto mb-12 md:mb-0 relative">
+                <div className="w-10 h-10 md:w-8 md:h-8 rounded-full bg-[rgb(255,70,46)] text-white flex items-center justify-center font-medium text-base md:text-sm relative z-10 border border-white/50">
                   2
                 </div>
-                <div className="ml-2 text-sm font-medium text-gray-700">
+                <div className="ml-4 md:ml-3 text-base md:text-sm font-medium text-gray-700">
                   Select Date & Time
                 </div>
               </div>
-              <div className="flex-1 h-1 mx-4 bg-[rgb(255,70,46)]/10"></div>
-              <div className="flex items-center">
-                <div className="w-8 h-8 rounded-md bg-[rgb(255,70,46)] text-white flex items-center justify-center font-medium">
+
+              {/* Desktop connecting line 2 */}
+              <div className="hidden md:block flex-1 h-0.5 mx-4 bg-[rgb(255,70,46)]/10"></div>
+
+              {/* Step 3 */}
+              <div className="flex items-center w-full md:w-auto relative">
+                <div className="w-10 h-10 md:w-8 md:h-8 rounded-full bg-[rgb(255,70,46)] text-white flex items-center justify-center font-medium text-base md:text-sm relative z-10 border border-white/50">
                   3
                 </div>
-                <div className="ml-2 text-sm font-medium text-gray-700">
+                <div className="ml-4 md:ml-3 text-base md:text-sm font-medium text-gray-700">
                   Terms & Conditions
                 </div>
               </div>
@@ -135,21 +236,21 @@ export default function BookingTermsPage() {
           </div>
 
           {/* Main content */}
-          <div className="rounded-lg backdrop-blur-md bg-white/30 border border-white/20 shadow-lg overflow-hidden">
-            <div className="p-6">
-              <h1 className="text-2xl font-bold text-gray-800 mb-6">
+          <div className="rounded-lg bg-white/90 border border-[rgb(255,70,46)]/10 overflow-hidden">
+            <div className="p-4 md:p-8">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 md:mb-8">
                 Terms & Conditions
               </h1>
 
               {/* Booking summary */}
-              <div className="rounded-lg backdrop-blur-md bg-white/30 border border-white/20 shadow-lg p-6 mb-8">
-                <h2 className="text-xl font-bold text-gray-800 mb-4">
+              <div className="rounded-lg bg-white/80 border border-[rgb(255,70,46)]/10 p-4 md:p-8 mb-6 md:mb-10">
+                <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-6">
                   Booking Summary
                 </h2>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-[rgb(255,70,46)]/10 rounded-md">
+                <div className="space-y-6 md:space-y-5">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+                    <div className="flex items-center space-x-4 md:space-x-3">
+                      <div className="p-2.5 md:p-2 bg-[rgb(255,70,46)]/10 rounded-md border border-[rgb(255,70,46)]/20">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-5 w-5 text-[rgb(255,70,46)]"
@@ -165,39 +266,16 @@ export default function BookingTermsPage() {
                           />
                         </svg>
                       </div>
-                      <span className="text-gray-600">Date</span>
+                      <span className="text-base text-gray-600">Date</span>
                     </div>
-                    <span className="text-gray-800 font-medium">{date}</span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-[rgb(255,70,46)]/10 rounded-md">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5 text-[rgb(255,70,46)]"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                      </div>
-                      <span className="text-gray-600">Time</span>
-                    </div>
-                    <span className="text-gray-800 font-medium">
-                      {startTime} - {/* Calculate end time */}
+                    <span className="text-base text-gray-800 font-medium">
+                      {date}
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-[rgb(255,70,46)]/10 rounded-md">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+                    <div className="flex items-center space-x-4 md:space-x-3">
+                      <div className="p-2.5 md:p-2 bg-[rgb(255,70,46)]/10 rounded-md border border-[rgb(255,70,46)]/20">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-5 w-5 text-[rgb(255,70,46)]"
@@ -213,18 +291,43 @@ export default function BookingTermsPage() {
                           />
                         </svg>
                       </div>
-                      <span className="text-gray-600">Duration</span>
+                      <span className="text-base text-gray-600">Time</span>
                     </div>
-                    <span className="text-gray-800 font-medium">
+                    <span className="text-base text-gray-800 font-medium">
+                      {startTime} - {endTime}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+                    <div className="flex items-center space-x-4 md:space-x-3">
+                      <div className="p-2.5 md:p-2 bg-[rgb(255,70,46)]/10 rounded-md border border-[rgb(255,70,46)]/20">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-[rgb(255,70,46)]"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </div>
+                      <span className="text-base text-gray-600">Duration</span>
+                    </div>
+                    <span className="text-base text-gray-800 font-medium">
                       {duration} hour{parseInt(duration) > 1 ? "s" : ""}
                     </span>
                   </div>
 
-                  <div className="w-full h-px bg-gray-200 my-4"></div>
+                  <div className="w-full h-px bg-gray-200 my-6 md:my-5"></div>
 
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-[rgb(255,70,46)]/10 rounded-md">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+                    <div className="flex items-center space-x-4 md:space-x-3">
+                      <div className="p-2.5 md:p-2 bg-[rgb(255,70,46)]/10 rounded-md border border-[rgb(255,70,46)]/20">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-5 w-5 text-[rgb(255,70,46)]"
@@ -240,192 +343,87 @@ export default function BookingTermsPage() {
                           />
                         </svg>
                       </div>
-                      <span className="text-gray-600">Total Price</span>
+                      <span className="text-base text-gray-600">
+                        Total Price
+                      </span>
                     </div>
-                    <span className="text-xl font-bold text-[rgb(255,70,46)]">
+                    <span className="text-xl md:text-2xl font-bold text-[rgb(255,70,46)]">
                       ₹{parseFloat(total).toFixed(2)}
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* Terms and conditions text */}
+              {/* Terms and conditions */}
               <div
                 ref={termsContainerRef}
-                className="h-64 overflow-y-auto p-4 rounded-md bg-white/50 backdrop-blur-sm border border-white/30 mb-6 text-sm text-gray-700 custom-scrollbar"
+                className="h-[300px] md:h-[400px] overflow-y-auto rounded-lg bg-white/80 border border-[rgb(255,70,46)]/10 p-4 md:p-8 mb-6 md:mb-10"
               >
-                <h3 className="font-bold text-gray-800 mb-2">
-                  1. BOOKING AGREEMENT
-                </h3>
-                <p className="mb-4">
-                  This booking agreement ("Agreement") is entered into between
-                  Kohinoor Spaces ("Provider") and the individual or entity
-                  making the booking ("Client"). By proceeding with this
-                  booking, Client agrees to be bound by the terms and conditions
-                  set forth herein.
-                </p>
-
-                <h3 className="font-bold text-gray-800 mb-2">
-                  2. BOOKING AND PAYMENT
-                </h3>
-                <p className="mb-2">
-                  2.1 Client agrees to pay the total amount specified in the
-                  booking summary for the use of the designated space during the
-                  specified time period.
-                </p>
-                <p className="mb-2">
-                  2.2 Full payment is required at the time of booking to confirm
-                  the reservation.
-                </p>
-                <p className="mb-2">
-                  2.3 All prices are exclusive of applicable taxes unless
-                  otherwise stated.
-                </p>
-                <p className="mb-4">
-                  2.4 Payment methods accepted include credit card, debit card,
-                  and other electronic payment methods as specified on the
-                  booking platform.
-                </p>
-
-                <h3 className="font-bold text-gray-800 mb-2">
-                  3. CANCELLATION POLICY
-                </h3>
-                <p className="mb-2">
-                  3.1 Cancellations made more than 48 hours prior to the booking
-                  start time will receive a full refund.
-                </p>
-                <p className="mb-2">
-                  3.2 Cancellations made between 24 and 48 hours prior to the
-                  booking start time will receive a 50% refund.
-                </p>
-                <p className="mb-2">
-                  3.3 Cancellations made less than 24 hours prior to the booking
-                  start time will not be eligible for a refund.
-                </p>
-                <p className="mb-4">
-                  3.4 Provider reserves the right to cancel bookings due to
-                  unforeseen circumstances, in which case Client will receive a
-                  full refund.
-                </p>
-
-                <h3 className="font-bold text-gray-800 mb-2">
-                  4. USE OF SPACE
-                </h3>
-                <p className="mb-2">
-                  4.1 Client agrees to use the space only for the purpose stated
-                  at the time of booking.
-                </p>
-                <p className="mb-2">
-                  4.2 Client shall not exceed the maximum capacity of the space
-                  as specified in the space details.
-                </p>
-                <p className="mb-2">
-                  4.3 Client is responsible for leaving the space in the same
-                  condition as it was found.
-                </p>
-                <p className="mb-4">
-                  4.4 Smoking, illegal activities, and disruptive behavior are
-                  strictly prohibited within the space.
-                </p>
-
-                <h3 className="font-bold text-gray-800 mb-2">5. LIABILITY</h3>
-                <p className="mb-2">
-                  5.1 Provider is not responsible for any loss, damage, or theft
-                  of Client's personal belongings or equipment.
-                </p>
-                <p className="mb-2">
-                  5.2 Client assumes all responsibility for any damage caused to
-                  the space or its contents during the booking period.
-                </p>
-                <p className="mb-4">
-                  5.3 Client agrees to indemnify and hold Provider harmless from
-                  any claims, damages, or liabilities arising from Client's use
-                  of the space.
-                </p>
-
-                <h3 className="font-bold text-gray-800 mb-2">
-                  6. PRIVACY POLICY
-                </h3>
-                <p className="mb-4">
-                  6.1 Client's personal information will be handled in
-                  accordance with Provider's Privacy Policy, which is available
-                  upon request.
-                </p>
-
-                <h3 className="font-bold text-gray-800 mb-2">
-                  7. MISCELLANEOUS
-                </h3>
-                <p className="mb-2">
-                  7.1 This Agreement constitutes the entire understanding
-                  between the parties and supersedes any prior agreements or
-                  understandings.
-                </p>
-                <p className="mb-2">
-                  7.2 This Agreement shall be governed by and construed in
-                  accordance with the laws of the jurisdiction in which the
-                  Provider operates.
-                </p>
-                <p className="mb-2">
-                  7.3 Any disputes arising under this Agreement shall be
-                  resolved through arbitration in accordance with the rules of
-                  the American Arbitration Association.
-                </p>
-                <p className="mb-2">
-                  7.4 Provider reserves the right to modify these terms and
-                  conditions at any time without prior notice.
-                </p>
-                <p className="mb-2">
-                  7.5 If any provision of this Agreement is found to be invalid
-                  or unenforceable, the remaining provisions shall remain in
-                  full force and effect.
-                </p>
+                <div className="prose prose-base max-w-none">
+                  <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">
+                    Booking Terms
+                  </h2>
+                  <p className="text-base text-gray-600 mb-6">
+                    By proceeding with this booking, you agree to the following
+                    terms and conditions:
+                  </p>
+                  <ul className="list-disc pl-5 space-y-4 md:space-y-3 text-base text-gray-600">
+                    <li>
+                      All bookings are subject to availability and confirmation.
+                    </li>
+                    <li>
+                      Payment must be made in full at the time of booking.
+                    </li>
+                    <li>
+                      Cancellations must be made at least 24 hours before the
+                      scheduled time.
+                    </li>
+                    <li>Late arrivals may result in reduced booking time.</li>
+                    <li>
+                      Please maintain the space in a clean and organized manner.
+                    </li>
+                    <li>No smoking or consumption of alcohol is permitted.</li>
+                    <li>
+                      Please respect other users and maintain appropriate noise
+                      levels.
+                    </li>
+                    <li>We reserve the right to refuse service to anyone.</li>
+                    <li>
+                      Personal belongings must be removed at the end of the
+                      booking.
+                    </li>
+                    <li>
+                      We are not responsible for any lost or stolen items.
+                    </li>
+                  </ul>
+                </div>
               </div>
 
-              {/* Agreement checkbox */}
-              <div className="mb-6">
-                <label className="flex items-center">
+              {/* Checkbox and button */}
+              <div className="flex flex-col gap-6">
+                <div className="flex items-start space-x-4 md:space-x-3">
                   <input
                     type="checkbox"
+                    id="terms"
                     checked={isChecked}
                     onChange={handleCheckboxChange}
                     disabled={!hasScrolled}
-                    className="form-checkbox h-5 w-5 text-[rgb(255,70,46)] transition duration-150 ease-in-out"
+                    className="mt-1 h-5 w-5 rounded border border-[rgb(255,70,46)]/30 text-[rgb(255,70,46)] focus:ring-[rgb(255,70,46)] disabled:opacity-50"
                   />
-                  <span className="ml-2 text-sm text-gray-700">
+                  <label htmlFor="terms" className="text-base text-gray-600">
                     I have read and agree to the terms and conditions
-                    {!hasScrolled && (
-                      <span className="text-red-500 ml-1">
-                        (please scroll through the terms first)
-                      </span>
-                    )}
-                  </span>
-                </label>
-              </div>
-
-              {/* Form buttons */}
-              <div className="flex items-center justify-between">
+                  </label>
+                </div>
                 <button
-                  type="button"
-                  onClick={() => router.back()}
-                  className="px-6 py-3 bg-white/40 backdrop-blur-sm text-gray-700 rounded-md hover:bg-white/60 transition-all duration-200 border border-white/30"
-                >
-                  Back
-                </button>
-
-                <button
-                  type="button"
                   onClick={handleSubmit}
                   disabled={!isChecked || isLoading}
-                  className={`px-8 py-3 rounded-md text-white font-medium shadow-md transition-all duration-300 ${
-                    !isChecked || isLoading
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-[rgb(255,70,46)] hover:bg-[rgb(255,70,46)]/90 hover:shadow-lg"
-                  }`}
+                  className="w-full md:w-auto px-8 py-4 md:py-3.5 bg-[rgb(255,70,46)] text-white rounded-md hover:bg-[rgb(255,70,46)]/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-base border border-white/20"
                 >
                   {isLoading ? (
-                    <span className="flex items-center">
+                    <>
                       <svg
-                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                        className="animate-spin h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                       >
@@ -444,7 +442,7 @@ export default function BookingTermsPage() {
                         ></path>
                       </svg>
                       Processing...
-                    </span>
+                    </>
                   ) : (
                     "Confirm Booking"
                   )}

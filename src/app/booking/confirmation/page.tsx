@@ -1,25 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { mockSpaces } from "@/data/mockSpaces";
-
-interface Booking {
-  _id: string;
-  spaceId: string;
-  startTime: string;
-  endTime: string;
-  status: "pending" | "confirmed" | "cancelled" | "completed";
-  createdAt: string;
-}
 
 export default function BookingConfirmationPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [booking, setBooking] = useState<Booking | null>(null);
 
   // Get query params
   const spaceId = searchParams.get("spaceId");
@@ -31,61 +18,18 @@ export default function BookingConfirmationPage() {
   // Find space from mock data
   const space = mockSpaces.find((s) => s.id === spaceId);
 
-  // Create booking
-  useEffect(() => {
-    const createBooking = async () => {
-      if (!spaceId || !date || !startTime || !duration || !total || !space) {
-        return;
-      }
-
-      try {
-        // Calculate start and end times
-        const startTimeObj = new Date(`${date}T${startTime}`);
-        const endTimeObj = new Date(
-          startTimeObj.getTime() + parseInt(duration) * 60 * 60 * 1000
-        );
-
-        // Create booking
-        const response = await fetch("/api/bookings", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            spaceId,
-            startTime: startTimeObj.toISOString(),
-            endTime: endTimeObj.toISOString(),
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to create booking");
-        }
-
-        const data = await response.json();
-        setBooking(data.booking);
-        setIsLoading(false);
-
-        // Redirect to dashboard after 3 seconds
-        setTimeout(() => {
-          router.push("/dashboard");
-        }, 3000);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to create booking"
-        );
-        setIsLoading(false);
-      }
-    };
-
-    createBooking();
-  }, [spaceId, date, startTime, duration, total, space, router]);
-
-  // If required params are missing, redirect back to spaces
+  // Redirect to dashboard after 3 seconds
   useEffect(() => {
     if (!spaceId || !date || !startTime || !duration || !total || !space) {
       router.push("/spaces");
+      return;
     }
+
+    const timer = setTimeout(() => {
+      router.push("/dashboard");
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, [spaceId, date, startTime, duration, total, space, router]);
 
   // If required params are missing, show loading
@@ -109,64 +53,6 @@ export default function BookingConfirmationPage() {
     minute: "2-digit",
     hour12: true,
   });
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <div className="rounded-lg backdrop-blur-md bg-white/30 border border-white/20 shadow-lg p-6">
-              <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8 text-red-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </div>
-                <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                  Booking Failed
-                </h1>
-                <p className="text-gray-600 mb-6">{error}</p>
-                <button
-                  onClick={() => router.push("/spaces")}
-                  className="px-6 py-3 bg-[rgb(255,70,46)] text-white rounded-md hover:bg-[rgb(255,70,46)]/90 transition-all duration-200"
-                >
-                  Try Again
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <div className="rounded-lg backdrop-blur-md bg-white/30 border border-white/20 shadow-lg p-6">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[rgb(255,70,46)] mx-auto"></div>
-                <p className="text-gray-600 mt-4">Creating your booking...</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -242,9 +128,7 @@ export default function BookingConfirmationPage() {
                     </div>
                     <span className="text-gray-600">Booking ID</span>
                   </div>
-                  <span className="text-gray-800 font-medium">
-                    {booking?._id || "Loading..."}
-                  </span>
+                  <span className="text-gray-800 font-medium">{spaceId}</span>
                 </div>
 
                 {/* Space name */}

@@ -77,17 +77,25 @@ export default function SpaceCard({ space, onClick }: SpaceCardProps) {
 
           {/* Price and book button */}
           <div className="flex justify-between items-center mt-auto pt-3 border-t border-gray-200/50">
-            <div className="flex flex-col">
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-gray-600">Hourly Rate</span>
-                <span className="text-lg font-bold text-gray-800">
-                  ₹{space.hourlyRate}
-                </span>
-              </div>
-            </div>
-            <button className="px-4 py-2 bg-[rgb(255,70,46)] text-white text-sm font-medium rounded-md hover:bg-[rgb(255,70,46)]/90 transition-all duration-300 hover:shadow-md">
-              Book Now
-            </button>
+            {space.id === "space-002" || space.id === "space-003" ? (
+              <button className="w-full px-4 py-2 bg-[rgb(255,70,46)] text-white text-sm font-medium rounded-md hover:bg-[rgb(255,70,46)]/90 transition-all duration-300 hover:shadow-md">
+                Contact Us
+              </button>
+            ) : (
+              <>
+                <div className="flex flex-col">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-gray-600">Hourly Rate</span>
+                    <span className="text-lg font-bold text-gray-800">
+                      ₹{space.hourlyRate}
+                    </span>
+                  </div>
+                </div>
+                <button className="px-4 py-2 bg-[rgb(255,70,46)] text-white text-sm font-medium rounded-md hover:bg-[rgb(255,70,46)]/90 transition-all duration-300 hover:shadow-md">
+                  Book Now
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
