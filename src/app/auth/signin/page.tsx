@@ -75,10 +75,10 @@ export default function SignIn() {
         // Check if user has completed onboarding
         if (data.onboardingCompleted) {
           // router.push("/spaces");
-          location.href = "/spaces";
+          location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/spaces`;
         } else {
           // router.push("/onboarding");
-          location.href = "/onboarding";
+          location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/onboarding`;
         }
       } else {
         setError(data.error || "Authentication failed");

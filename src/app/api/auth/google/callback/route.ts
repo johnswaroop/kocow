@@ -75,7 +75,8 @@ export async function GET(request: NextRequest) {
       : searchParams.get("state") || "/onboarding";
 
     // Redirect to the final destination
-    return NextResponse.redirect(new URL(redirectTo, request.url));
+    const baseUrl = process.env.BASE_URL || request.url;
+    return NextResponse.redirect(new URL(redirectTo, baseUrl));
   } catch (error) {
     console.error("Error in Google callback:", error);
     return NextResponse.redirect(
