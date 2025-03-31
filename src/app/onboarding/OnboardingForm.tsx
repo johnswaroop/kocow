@@ -1,14 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 interface OnboardingFormProps {
   initialName: string;
 }
 
 export default function OnboardingForm({ initialName }: OnboardingFormProps) {
-  const router = useRouter();
   const [formData, setFormData] = useState({
     name: initialName || "",
     phone: "",
@@ -117,8 +115,9 @@ export default function OnboardingForm({ initialName }: OnboardingFormProps) {
 
               if (retryResponse.ok) {
                 console.log("[OnboardingForm] Update succeeded on retry");
-                router.refresh();
-                router.push("/spaces");
+                location.reload();
+                // router.push("/spaces");
+                location.href = "/spaces";
                 return;
               } else {
                 console.error("[OnboardingForm] Retry update failed");
@@ -138,10 +137,10 @@ export default function OnboardingForm({ initialName }: OnboardingFormProps) {
       console.log("[OnboardingForm] Update successful, redirecting to spaces");
 
       // Refresh the session to get updated user data
-      router.refresh();
+      location.reload();
 
       // Redirect to spaces
-      router.push("/spaces");
+      location.href = "/spaces";
     } catch (error) {
       console.error("[OnboardingForm] Error submitting form:", error);
       setError(
