@@ -5,6 +5,12 @@ import { connectToDatabase } from "@/lib/mongoose";
 import { findOrCreateUser } from "@/models/User";
 
 // Google OAuth client configuration
+
+//throw is base_url is not set
+if (!process.env.BASE_URL) {
+  throw new Error("BASE_URL is not set");
+}
+
 const client = new OAuth2Client({
   clientId: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
